@@ -4,19 +4,19 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContaine
 const TicketAnalytics = ({ data }) => {
   // Create status data from the backend response
   const statusData = [
-    { status: 'Open', count: data.open_tickets || 0 },
-    { status: 'In Progress', count: data.in_progress_tickets || 0 },
-    { status: 'Resolved', count: data.resolved_tickets || 0 }
+    { status: 'Open', count: data.status_distribution?.open || 0 },
+    { status: 'In Progress', count: data.status_distribution?.['in_progress'] || 0 },
+    { status: 'Resolved', count: data.status_distribution?.resolved || 0 }
   ];
 
-  // Create priority data from priority_breakdown
-  const priorityData = Object.entries(data.priority_breakdown || {}).map(([priority, count]) => ({
+  // Create priority data from priority_distribution
+  const priorityData = Object.entries(data.priority_distribution || {}).map(([priority, count]) => ({
     priority: priority.charAt(0).toUpperCase() + priority.slice(1),
     count
   }));
 
-  // Create category data from category_breakdown
-  const categoryData = Object.entries(data.category_breakdown || {}).map(([category, count]) => ({
+  // Create category data from category_distribution
+  const categoryData = Object.entries(data.category_distribution || {}).map(([category, count]) => ({
     category: category.replace('_', ' '),
     count
   }));
@@ -94,7 +94,7 @@ const TicketAnalytics = ({ data }) => {
           <div className="flex justify-between items-center">
             <span className="text-sm text-gray-600">Average Resolution Time</span>
             <span className="text-lg font-semibold text-gray-900">
-              {data.avg_resolution_hours || 0}h
+              {data.avg_resolution_time || 0}h
             </span>
           </div>
           <div className="grid grid-cols-2 gap-4 pt-4 border-t">

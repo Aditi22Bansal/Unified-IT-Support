@@ -127,9 +127,9 @@ const RegisterPage = () => {
         role: formData.role
       });
 
-      if (response.access_token) {
-        localStorage.setItem('token', response.access_token);
-        localStorage.setItem('user', JSON.stringify(response.user));
+      if (response.data && response.data.access_token) {
+        localStorage.setItem('token', response.data.access_token);
+        localStorage.setItem('user', JSON.stringify(response.data.user));
 
         toast.success('Registration successful! Welcome to IT Support Pro!');
         navigate('/dashboard');
@@ -137,6 +137,7 @@ const RegisterPage = () => {
         throw new Error('Registration failed');
       }
     } catch (error) {
+      console.error('Registration error:', error);
       toast.error('Registration failed. Please try again.');
     } finally {
       setIsLoading(false);

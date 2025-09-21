@@ -35,3 +35,5 @@ const FormattedMessage = ({ message, isUser, timestamp, confidence }) => {
 export default FormattedMessage;
 
 
+
+

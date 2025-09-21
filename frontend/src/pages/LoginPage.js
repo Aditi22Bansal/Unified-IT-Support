@@ -1,19 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { 
-  Eye, 
-  EyeOff, 
-  Shield, 
-  AlertTriangle, 
+import {
+  Eye,
+  EyeOff,
+  Shield,
+  AlertTriangle,
   CheckCircle,
   Lock,
   Mail,
   User
 } from 'lucide-react';
-import { authAPI } from '../services/api';
+import { useAuth } from '../contexts/AuthContext';
 import toast from 'react-hot-toast';
 
 const LoginPage = () => {
+  const { login } = useAuth();
   const [formData, setFormData] = useState({
     username: '',
     password: '',
@@ -98,15 +99,9 @@ const LoginPage = () => {
     setIsLoading(true);
 
     try {
-      const response = await authAPI.login(formData.username, formData.password);
+      const result = await login(formData.username, formData.password);
 
-      if (response.access_token) {
-        localStorage.setItem('token', response.access_token);
-        localStorage.setItem('user', JSON.stringify(response.user || {
-          username: formData.username,
-          role: 'admin'
-        }));
-
+      if (result.success) {
         // Reset login attempts on successful login
         localStorage.removeItem('loginAttempts');
         localStorage.removeItem('lastLoginAttempt');
@@ -114,9 +109,10 @@ const LoginPage = () => {
         toast.success('Login successful!');
         navigate('/dashboard');
       } else {
-        throw new Error('Invalid credentials');
+        throw new Error(result.error || 'Login failed');
       }
     } catch (error) {
+      console.error('Login error:', error);
       const newAttempts = loginAttempts + 1;
       setLoginAttempts(newAttempts);
       localStorage.setItem('loginAttempts', newAttempts.toString());

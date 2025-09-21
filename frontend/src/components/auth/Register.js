@@ -7,12 +7,12 @@ import toast from 'react-hot-toast';
 const Register = () => {
   const { register } = useAuth();
   const [formData, setFormData] = useState({
-    username: '',
     email: '',
     password: '',
     confirmPassword: '',
-    full_name: '',
-    role: 'customer'
+    phone_number: '',
+    account_type: 'customer',
+    full_name: ''
   });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -78,17 +78,17 @@ const Register = () => {
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div className="space-y-4">
             <div>
-              <label htmlFor="username" className="block text-sm font-medium text-gray-700">
-                Username
+              <label htmlFor="phone_number" className="block text-sm font-medium text-gray-700">
+                Phone Number
               </label>
               <input
-                id="username"
-                name="username"
+                id="phone_number"
+                name="phone_number"
                 type="text"
                 required
                 className="input mt-1"
-                placeholder="Enter your username"
-                value={formData.username}
+                placeholder="Enter your phone number"
+                value={formData.phone_number}
                 onChange={handleChange}
               />
             </div>
@@ -123,14 +123,14 @@ const Register = () => {
               />
             </div>
             <div>
-              <label htmlFor="role" className="block text-sm font-medium text-gray-700">
-                Role
+              <label htmlFor="account_type" className="block text-sm font-medium text-gray-700">
+                Account Type
               </label>
               <select
-                id="role"
-                name="role"
+                id="account_type"
+                name="account_type"
                 className="input mt-1"
-                value={formData.role}
+                value={formData.account_type}
                 onChange={handleChange}
               >
                 <option value="customer">Customer</option>

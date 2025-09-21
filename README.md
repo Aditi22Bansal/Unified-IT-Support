@@ -77,7 +77,7 @@ A comprehensive, enterprise-grade IT operations platform with AI-driven automati
    # Backend
    cd backend
    pip install -r requirements.txt
-   
+
    # Frontend
    cd ../frontend
    npm install
@@ -85,14 +85,12 @@ A comprehensive, enterprise-grade IT operations platform with AI-driven automati
 
 4. **Run the application**
    ```bash
-   # Option 1: Docker (Recommended)
-   docker-compose up -d
-   
-   # Option 2: Manual
+
+   # Option 1: Manual
    # Terminal 1 - Backend
    cd backend
-   python simple_main_enhanced.py
-   
+   python main_dynamic.py
+
    # Terminal 2 - Frontend
    cd frontend
    npm start
@@ -194,12 +192,37 @@ chmod +x deploy.sh
 ```bash
 # Backend
 cd backend
-python simple_main_enhanced.py
+python main_dynamic.py
 
 # Frontend
 cd frontend
 npm start
 ```
+
+## 🧪 Testing
+
+### Run All Tests
+```bash
+cd backend
+python tests/run_tests.py
+```
+
+### Run Specific Test Categories
+```bash
+# Authentication tests
+cd backend/tests/auth
+python test_auth_fix.py
+
+# API tests
+cd backend/tests/api
+python test_health.py
+
+# Integration tests
+cd backend/tests/integration
+python test_backend.py
+```
+
+See [Test Documentation](backend/tests/README.md) for detailed testing information.
 
 ## 📊 Features Overview
 
@@ -239,5 +262,7 @@ For support and questions:
 ---
 
 **Built with ❤️ for modern IT operations**
+
+
 
 

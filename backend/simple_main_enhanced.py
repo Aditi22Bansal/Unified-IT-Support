@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect
+from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect, Header
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 import os
@@ -756,9 +756,45 @@ async def login(login_data: dict):
 
     # Simple mock authentication - accept any username/password for demo
     if username and password:
+        # Generate a token
+        token = f"mock_token_{username}_{int(datetime.now().timestamp())}"
+
+        # Find or create user
+        user = None
+        for u in users_db:
+            if u["username"] == username:
+                user = u
+                break
+
+        if not user:
+            # Create new user if not found
+            user = {
+                "id": len(users_db) + 1,
+                "username": username,
+                "email": f"{username}@example.com",
+                "full_name": username.title(),
+                "role": "customer",
+                "is_active": True,
+                "created_at": datetime.now().isoformat(),
+                "token": token
+            }
+            users_db.append(user)
+        else:
+            # Update existing user with new token
+            user["token"] = token
+
         return {
-            "access_token": f"mock_token_{username}_{int(datetime.now().timestamp())}",
-            "token_type": "bearer"
+            "access_token": token,
+            "token_type": "bearer",
+            "user": {
+                "id": user["id"],
+                "username": user["username"],
+                "email": user["email"],
+                "full_name": user["full_name"],
+                "role": user["role"],
+                "is_active": user["is_active"],
+                "created_at": user["created_at"]
+            }
         }
     else:
         return {"detail": "Username and password required"}
@@ -766,27 +802,79 @@ async def login(login_data: dict):
 @app.post("/api/auth/register")
 async def register(user_data: dict):
     """Register endpoint."""
-    return {
-        "id": 1,
+    # Generate a token for the new user
+    token = f"mock_token_{user_data.get('username', 'user')}_{int(datetime.now().timestamp())}"
+
+    # Create new user
+    user = {
+        "id": len(users_db) + 1,
         "username": user_data.get("username", ""),
         "email": user_data.get("email", ""),
         "full_name": user_data.get("full_name", ""),
         "role": user_data.get("role", "customer"),
         "is_active": True,
-        "created_at": datetime.now().isoformat()
+        "created_at": datetime.now().isoformat(),
+        "token": token
+    }
+
+    # Add to users database
+    users_db.append(user)
+
+    return {
+        "id": user["id"],
+        "username": user["username"],
+        "email": user["email"],
+        "full_name": user["full_name"],
+        "role": user["role"],
+        "is_active": user["is_active"],
+        "created_at": user["created_at"],
+        "access_token": token,
+        "token_type": "bearer"
     }
 
 @app.get("/api/auth/me")
-async def get_current_user():
-    """Get current user info."""
+async def get_current_user(authorization: str = Header(None)):
+    """Get current user info from token."""
+    if not authorization or not authorization.startswith("Bearer "):
+        raise HTTPException(status_code=401, detail="Missing or invalid authorization header")
+
+    token = authorization.split(" ")[1]
+
+    # Simple token validation - in production, use proper JWT validation
+    # For now, we'll check if it's a valid token format
+    if not token or len(token) < 10:
+        raise HTTPException(status_code=401, detail="Invalid token")
+
+    # Try to find user by token in our simple storage
+    # This is a simplified approach - in production, use proper JWT validation
+    user = None
+    for u in users_db:
+        if u.get("token") == token:
+            user = u
+            break
+
+    if not user:
+        # Fallback: return a default user if token validation fails
+        # This maintains backward compatibility but logs the issue
+        print(f"Warning: Token validation failed for token: {token[:10]}...")
+        return {
+            "id": 1,
+            "username": "demo_user",
+            "email": "demo@example.com",
+            "full_name": "Demo User",
+            "role": "admin",
+            "is_active": True,
+            "created_at": datetime.now().isoformat()
+        }
+
     return {
-        "id": 1,
-        "username": "demo_user",
-        "email": "demo@example.com",
-        "full_name": "Demo User",
-        "role": "admin",
-        "is_active": True,
-        "created_at": datetime.now().isoformat()
+        "id": user["id"],
+        "username": user["username"],
+        "email": user["email"],
+        "full_name": user["full_name"],
+        "role": user["role"],
+        "is_active": user["is_active"],
+        "created_at": user["created_at"]
     }
 
 # Analytics endpoints

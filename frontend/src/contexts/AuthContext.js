@@ -37,11 +37,20 @@ export function AuthProvider({ children }) {
   const login = async (username, password) => {
     try {
       const response = await authAPI.login(username, password);
-      localStorage.setItem('token', response.access_token);
-      const userData = await authAPI.getCurrentUser();
-      setUser(userData);
+      localStorage.setItem('token', response.data.access_token);
+
+      // Use user data from login response instead of making another API call
+      if (response.data.user) {
+        setUser(response.data.user);
+      } else {
+        // Fallback to getCurrentUser if user data not in login response
+        const userData = await authAPI.getCurrentUser();
+        setUser(userData);
+      }
+
       return { success: true };
     } catch (error) {
+      console.error('AuthContext login error:', error);
       return {
         success: false,
         error: error.response?.data?.detail || 'Login failed'

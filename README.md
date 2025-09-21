@@ -104,11 +104,6 @@ A comprehensive, enterprise-grade IT operations platform with AI-driven automati
 - **Dashboard**: http://localhost:3000/dashboard (after login)
 - **API Documentation**: http://localhost:8001/docs
 
-## 🔑 Default Credentials
-
-- **Admin**: `admin` / `admin123`
-- **Agent**: `agent` / `agent123`
-- **Customer**: `customer` / `customer123`
 
 ## 🛠️ Technology Stack
 

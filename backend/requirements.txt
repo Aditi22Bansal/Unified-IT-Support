@@ -1,0 +1,61 @@
+# Backend Dependencies
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+sqlalchemy==2.0.23
+alembic==1.12.1
+psycopg2-binary==2.9.9
+python-multipart==0.0.6
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
+python-dotenv==1.0.0
+pydantic==2.5.0
+pydantic-settings==2.1.0
+
+# AI and Chatbot
+langchain==0.1.0
+openai==1.3.7
+langchain-openai==0.0.2
+langchain-community==0.0.10
+
+# Database
+prisma==0.12.0
+sqlalchemy==2.0.23
+alembic==1.12.1
+
+# Real-time and Monitoring
+psutil==5.9.6
+prometheus-client==0.19.0
+asyncio-mqtt==0.16.1
+
+# Authentication and Security
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
+python-multipart==0.0.6
+
+# Additional utilities
+pydantic==2.5.0
+python-dotenv==1.0.0
+
+# Encryption and Security
+cryptography==41.0.7
+pyotp==2.9.0
+qrcode==7.4.2
+pillow==10.1.0
+pycryptodome==3.19.0
+
+# Monitoring and Metrics
+psutil==5.9.6
+prometheus-client==0.19.0
+
+# Email and Notifications
+slack-sdk==3.26.1
+
+# Data Processing
+pandas==2.1.4
+numpy==1.25.2
+
+# Development
+pytest==7.4.3
+pytest-asyncio==0.21.1
+httpx==0.25.2
+
